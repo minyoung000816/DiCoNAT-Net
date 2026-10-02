@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# IDE / OS
+.idea/
+.vscode/
+desktop.ini
+.DS_Store
+
+# Training outputs
+runs/
+results/
+
+# Model checkpoints
+*.pth
+*.pt
+*.pkl
+*.ckpt
+
+# Local datasets
+datasets/
+dataset/
