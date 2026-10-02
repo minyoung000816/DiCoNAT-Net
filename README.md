@@ -2,20 +2,20 @@
 
 **A Dilated Neighborhood Attention Transformer with Dual-Path Architecture for Motion Deblurring**
 
-PyTorch implementation of **DiCoNAT-Net**, an image deblurring network that combines direction-aware feature learning, Dilated Neighborhood Attention (DiNAT), and cascaded refinement.
+PyTorch implementation of **DiCoNAT-Net**, a motion deblurring network that combines direction-aware feature learning, Dilated Neighborhood Attention (DiNAT), and cascaded refinement.
 
-**Highlights**
+## Highlights
+
 - **32.86 dB PSNR / 0.9603 SSIM** on the GoPro test set
 - **7.5M parameters**
 - Direction-aware **Dual-Path Encoder–Decoder**
-- DiNAT-based modeling of local and long-range dependencies
-- Evaluated on **GoPro, HIDE, and REDS**, with additional ablation and YOLOv8 object-detection experiments
+- **DiNAT-based decoder** for local and long-range dependency modeling
+- Evaluated on **GoPro, HIDE, and REDS**
+- Additional validation through **ablation studies** and **YOLOv8 object-detection experiments**
 
-## What I Developed
+## Key Contributions
 
-DiCoNAT-Net was designed to address two limitations of existing deblurring approaches: the restricted receptive field of CNN-based models and the high computational cost of conventional Transformer self-attention.
-
-The proposed network introduces:
+DiCoNAT-Net was designed to address the limited receptive field of CNN-based deblurring models and the high computational cost of conventional Transformer self-attention.
 
 - **Dual-Path Encoder–Decoder**  
   The original image and a 90°-rotated image are processed through separate directional paths to learn horizontal and vertical blur characteristics.
@@ -26,7 +26,7 @@ The proposed network introduces:
 - **Two-Stage Cascaded Refinement**  
   Two consecutive deblurring stages progressively remove residual blur and refine structural details.
 
-I implemented the proposed network in PyTorch and evaluated its effectiveness through quantitative/qualitative comparisons, ablation studies, model-complexity analysis, and a downstream object-detection experiment.
+The proposed network was implemented in PyTorch and evaluated through quantitative and qualitative comparisons, ablation studies, model-complexity analysis, and object-detection experiments.
 
 ## Network Architecture
 
@@ -72,78 +72,15 @@ The model contains approximately **7.5M parameters**. In the Transformer-based c
 
 The examples show restoration of fine structures such as repeated line patterns and window boundaries under motion blur.
 
-## Downstream Object Detection
+## Object Detection Evaluation
 
-To examine whether deblurring can improve a downstream computer-vision task, restored GoPro images were evaluated using **YOLOv8**.
+To evaluate the practical effectiveness of image deblurring, restored GoPro images were evaluated using **YOLOv8**.
 
-In the reported experiment, DiCoNAT-Net improved **mAP50 by 9.5%** compared with the blurred input, with improvements also observed for the People, Car, and Potted Plant classes.
+In the reported experiment, DiCoNAT-Net improved **mAP50 by 9.5%** compared with the blurred input.
 
 <p align="center">
   <img src="assets/object_detection.png" alt="Object detection comparison" width="900">
 </p>
-
-## Reproducibility
-
-<details>
-<summary><b>Experimental setup</b></summary>
-
-The reported experiments used:
-
-- Framework: PyTorch
-- GPU: NVIDIA GeForce RTX 4090
-- Optimizer: Adam
-- Learning rate: `1e-4`
-- Batch size: `4`
-- Training epochs: `3000`
-- Training crop size: `256 × 256`
-
-The GoPro dataset used for training and evaluation contains **2,103 training pairs** and **1,111 test pairs**.
-
-Major dependencies include PyTorch, torchvision, NATTEN, NumPy, SciPy, scikit-image, tqdm, TensorBoard, and fvcore.
-
-> Exact package versions from the original experimental environment are not included in this repository.
-
-</details>
-
-<details>
-<summary><b>Dataset structure</b></summary>
-
-```text
-dataset/
-├── train/
-│   ├── blur/
-│   └── sharp/
-├── test/
-│   ├── blur/
-│   └── sharp/
-└── valid/              # optional
-    ├── blur/
-    └── sharp/
-```
-
-</details>
-
-<details>
-<summary><b>Training and evaluation</b></summary>
-
-Training:
-
-```bash
-python main.py --mode train --data_dir /path/to/dataset
-```
-
-Evaluation:
-
-```bash
-python main.py \
-    --mode test \
-    --data_dir /path/to/dataset \
-    --test_model ./weights/Best.pkl
-```
-
-Pretrained weights are not included in this repository.
-
-</details>
 
 ## Project Structure
 
@@ -164,13 +101,6 @@ DiCoNAT-Net/
 └── README.md
 ```
 
-## Manuscript
-
-**A Dilated Neighborhood Attention Transformer with Dual-Path Architecture for Motion Deblurring**  
-Minyoung Lee, Ho Sub Lee
-
-*Submitted manuscript.*
-
 ## Acknowledgements
 
 Parts of the training and evaluation pipeline were developed with reference to the public **XYDeblur** implementation:
@@ -178,8 +108,3 @@ Parts of the training and evaluation pipeline were developed with reference to t
 - [XY-Single-Image-Deblurring](https://github.com/Tarak200/XY-Single-Image-Deblurring)
 
 DiCoNAT-Net introduces the proposed dual-path directional architecture, DiNAT-based decoding, and cascaded refinement design used in this work.
-
-## Notes
-
-- The repository does not include the GoPro, HIDE, or REDS datasets.
-- The repository does not currently include pretrained model weights.
